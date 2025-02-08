@@ -1,0 +1,118 @@
+[
+    {
+        "label": "streamlit",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "streamlit",
+        "description": "streamlit",
+        "detail": "streamlit",
+        "documentation": {}
+    },
+    {
+        "label": "PyPDF2",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "PyPDF2",
+        "description": "PyPDF2",
+        "detail": "PyPDF2",
+        "documentation": {}
+    },
+    {
+        "label": "SentenceTransformer",
+        "importPath": "sentence_transformers",
+        "description": "sentence_transformers",
+        "isExtraImport": true,
+        "detail": "sentence_transformers",
+        "documentation": {}
+    },
+    {
+        "label": "faiss",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "faiss",
+        "description": "faiss",
+        "detail": "faiss",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "google.generativeai",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "google.generativeai",
+        "description": "google.generativeai",
+        "detail": "google.generativeai",
+        "documentation": {}
+    },
+    {
+        "label": "extract_text_from_pdf",
+        "kind": 2,
+        "importPath": "chat_with_pdf",
+        "description": "chat_with_pdf",
+        "peekOfCode": "def extract_text_from_pdf(pdf_file):\n    \"\"\"\n    Extracts all text from a PDF file (expects a file-like object).\n    \"\"\"\n    text = \"\"\n    try:\n        pdf_reader = PyPDF2.PdfReader(pdf_file)\n        for page in pdf_reader.pages:\n            page_text = page.extract_text()\n            if page_text:",
+        "detail": "chat_with_pdf",
+        "documentation": {}
+    },
+    {
+        "label": "chunk_text",
+        "kind": 2,
+        "importPath": "chat_with_pdf",
+        "description": "chat_with_pdf",
+        "peekOfCode": "def chunk_text(text, max_words=100):\n    \"\"\"\n    Splits text into chunks of up to max_words words.\n    \"\"\"\n    words = text.split()\n    chunks = []\n    for i in range(0, len(words), max_words):\n        chunk = \" \".join(words[i:i+max_words])\n        chunks.append(chunk)\n    return chunks",
+        "detail": "chat_with_pdf",
+        "documentation": {}
+    },
+    {
+        "label": "build_faiss_index",
+        "kind": 2,
+        "importPath": "chat_with_pdf",
+        "description": "chat_with_pdf",
+        "peekOfCode": "def build_faiss_index(chunks, embedder):\n    \"\"\"\n    Computes embeddings for each text chunk and builds a FAISS index.\n    \"\"\"\n    embeddings = embedder.encode(chunks, convert_to_numpy=True)\n    dimension = embeddings.shape[1]\n    # Create a flat L2 index (simple but effective for small datasets)\n    index = faiss.IndexFlatL2(dimension)\n    index.add(embeddings)\n    return index, embeddings",
+        "detail": "chat_with_pdf",
+        "documentation": {}
+    },
+    {
+        "label": "retrieve_context",
+        "kind": 2,
+        "importPath": "chat_with_pdf",
+        "description": "chat_with_pdf",
+        "peekOfCode": "def retrieve_context(query, embedder, index, chunks, top_k=3):\n    \"\"\"\n    Retrieves the top_k most relevant chunks for the given query.\n    \"\"\"\n    query_embedding = embedder.encode([query], convert_to_numpy=True)\n    distances, indices = index.search(query_embedding, top_k)\n    # Gather the corresponding text chunks.\n    retrieved_chunks = [chunks[i] for i in indices[0]]\n    return retrieved_chunks\ndef call_llm(prompt, model=\"gemini-pro\"):",
+        "detail": "chat_with_pdf",
+        "documentation": {}
+    },
+    {
+        "label": "call_llm",
+        "kind": 2,
+        "importPath": "chat_with_pdf",
+        "description": "chat_with_pdf",
+        "peekOfCode": "def call_llm(prompt, model=\"gemini-pro\"):\n    \"\"\"\n    Calls the Google Gemini API (via the Generative AI library) with the given prompt.\n    Uses the specified model and generation parameters.\n    \"\"\"\n    # Configure the API key (hard-coded above)\n    genai.configure(api_key=GEMINI_API_KEY)\n    generation_config = {\n        \"temperature\": 0.7,\n        \"top_p\": 0.9,",
+        "detail": "chat_with_pdf",
+        "documentation": {}
+    },
+    {
+        "label": "GEMINI_API_KEY",
+        "kind": 5,
+        "importPath": "chat_with_pdf",
+        "description": "chat_with_pdf",
+        "peekOfCode": "GEMINI_API_KEY = st.secrets[\"GEMINI_API_KEY\"]\n# -----------------------------------------------------------------------------\ndef extract_text_from_pdf(pdf_file):\n    \"\"\"\n    Extracts all text from a PDF file (expects a file-like object).\n    \"\"\"\n    text = \"\"\n    try:\n        pdf_reader = PyPDF2.PdfReader(pdf_file)\n        for page in pdf_reader.pages:",
+        "detail": "chat_with_pdf",
+        "documentation": {}
+    },
+    {
+        "label": "uploaded_file",
+        "kind": 5,
+        "importPath": "chat_with_pdf",
+        "description": "chat_with_pdf",
+        "peekOfCode": "uploaded_file = st.file_uploader(\"Choose a PDF file\", type=\"pdf\")\nif uploaded_file is not None:\n    # Extract text from the uploaded PDF\n    with st.spinner(\"Extracting text from PDF...\"):\n        text = extract_text_from_pdf(uploaded_file)\n    if text is None or not text.strip():\n        st.error(\"No text could be extracted from the PDF.\")\n    else:\n        st.success(\"PDF text extracted successfully!\")\n        # Chunk the text",
+        "detail": "chat_with_pdf",
+        "documentation": {}
+    }
+]
