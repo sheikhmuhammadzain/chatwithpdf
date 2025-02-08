@@ -7,7 +7,17 @@ import google.generativeai as genai  # Using the google-generativeai library
 
 # -----------------------------------------------------------------------------
 # HARD-CODE YOUR GEMINI API KEY HERE (not recommended for production)
-GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
+import os
+import dotenv  # Import dotenv to load .env variables
+
+# Load the .env file
+dotenv.load_dotenv()
+
+# Retrieve the API key from the environment variable
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+if not GEMINI_API_KEY:
+    raise ValueError("Error: GEMINI_API_KEY is not set. Please check your .env file.")
 # -----------------------------------------------------------------------------
 
 def extract_text_from_pdf(pdf_file):

@@ -53,6 +53,24 @@
         "documentation": {}
     },
     {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "dotenv",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "dotenv",
+        "description": "dotenv",
+        "detail": "dotenv",
+        "documentation": {}
+    },
+    {
         "label": "extract_text_from_pdf",
         "kind": 2,
         "importPath": "chat_with_pdf",
@@ -102,7 +120,7 @@
         "kind": 5,
         "importPath": "chat_with_pdf",
         "description": "chat_with_pdf",
-        "peekOfCode": "GEMINI_API_KEY = st.secrets[\"GEMINI_API_KEY\"]\n# -----------------------------------------------------------------------------\ndef extract_text_from_pdf(pdf_file):\n    \"\"\"\n    Extracts all text from a PDF file (expects a file-like object).\n    \"\"\"\n    text = \"\"\n    try:\n        pdf_reader = PyPDF2.PdfReader(pdf_file)\n        for page in pdf_reader.pages:",
+        "peekOfCode": "GEMINI_API_KEY = os.getenv(\"GEMINI_API_KEY\")\nif not GEMINI_API_KEY:\n    raise ValueError(\"Error: GEMINI_API_KEY is not set. Please check your .env file.\")\n# -----------------------------------------------------------------------------\ndef extract_text_from_pdf(pdf_file):\n    \"\"\"\n    Extracts all text from a PDF file (expects a file-like object).\n    \"\"\"\n    text = \"\"\n    try:",
         "detail": "chat_with_pdf",
         "documentation": {}
     },
